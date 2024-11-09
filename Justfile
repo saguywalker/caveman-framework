@@ -13,3 +13,6 @@ format_check:
 
 format:
     clojure -M:format -m cljfmt.main fix src dev
+
+lint:
+    clojure -M:lint -m clj-kondo.main --lint .

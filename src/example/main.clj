@@ -1,6 +1,5 @@
 (ns example.main
-  (:require [example.system :as system]
-            [ring.adapter.jetty :as jetty]))
+  (:require [example.system :as system]))
 
 (defn -main []
   (system/start-system))
