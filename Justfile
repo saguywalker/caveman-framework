@@ -6,7 +6,7 @@ run:
     clojure -M -m example.main
 
 nrepl:
-    clojure -M:nREPL -m nrepl.cmdline
+    clojure -M:dev -m nrepl.cmdline
 
 format_check:
     clojure -M:format -m cljfmt.main check src dev
@@ -16,3 +16,6 @@ format:
 
 lint:
     clojure -M:lint -m clj-kondo.main --lint .
+
+test:
+    clojure -M:dev -m kaocha.runner
