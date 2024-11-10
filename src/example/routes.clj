@@ -1,17 +1,22 @@
 (ns example.routes
   (:require [clojure.tools.logging :as log]
+            [example.system :as-alias system]
             [hiccup2.core :as hiccup]
+            [next.jdbc :as jdbc]
             [reitit.ring :as reitit-ring]))
 
 (defn hello-handler
-  [_system _request]
-  {:status 200
-   :headers {"Content-Type" "text/html"}
-   :body (str
-          (hiccup/html
-           [:html
-            [:body
-             [:h1 "Hello, world"]]]))})
+  [{::system/keys [db]} _request]
+  (let [{:keys [planet]} (jdbc/execute-one!
+                          db
+                          ["SELECT 'earth' as planet"])]
+    {:status 200
+     :headers {"Content-Type" "text/html"}
+     :body (str
+            (hiccup/html
+             [:html
+              [:body
+               [:h1 "Hello, world"]]]))}))
 
 (defn goodbye-handler
   [_system _request]
