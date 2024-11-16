@@ -2,6 +2,7 @@
 .lsp/
 .cpcache/
 .clj-kondo/.cache
+.clj-kondo/imports
 .calva/
 .env
 data
