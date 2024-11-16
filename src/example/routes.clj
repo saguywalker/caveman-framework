@@ -1,5 +1,6 @@
 (ns example.routes
   (:require [clojure.tools.logging :as log]
+            [example.cave.routes :as cave-routes]
             [example.goodbye.routes :as goodbye-routes]
             [example.hello.routes :as hello-routes]
             [hiccup2.core :as hiccup]
@@ -8,6 +9,7 @@
 (defn routes
   [system]
   [""
+   (cave-routes/routes system)
    (hello-routes/routes system)
    (goodbye-routes/routes system)])
 
