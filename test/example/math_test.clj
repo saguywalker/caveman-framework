@@ -11,7 +11,5 @@
     (fn [db]
       (jdbc/execute! db ["INSERT INTO prehistoric.hominid(name) VALUES(?)" "Grunto"])
       (jdbc/execute! db ["INSERT INTO prehistoric.hominid(name) VALUES(?)" "Blingus"])
-      (let [res (jdbc/execute-one! db ["SELECT COUNT(*) as count FROM prehistoric.hominid"])]
-        (println res))
       (t/is (= (:count (jdbc/execute-one! db ["SELECT COUNT(*) as count FROM prehistoric.hominid"]))
                2)))))
