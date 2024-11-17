@@ -1,15 +1,13 @@
 (ns example.test-system
-  (:require
-   [clojure.java.io :as io]
-   [next.jdbc :as jdbc])
-  (:import
-   (java.util Properties)
-   (org.apache.ibatis.migration DataSourceConnectionProvider FileMigrationLoader)
-   (org.apache.ibatis.migration.operations UpOperation)
-   (org.apache.ibatis.migration.options DatabaseOperationOption)
-   (org.testcontainers.containers PostgreSQLContainer)
-   (org.testcontainers.containers.wait.strategy Wait)
-   (org.testcontainers.utility DockerImageName)))
+  (:require [clojure.java.io :as io]
+            [next.jdbc :as jdbc])
+  (:import (java.util Properties)
+           (org.apache.ibatis.migration DataSourceConnectionProvider FileMigrationLoader)
+           (org.apache.ibatis.migration.operations UpOperation)
+           (org.apache.ibatis.migration.options DatabaseOperationOption)
+           (org.testcontainers.containers PostgreSQLContainer)
+           (org.testcontainers.containers.wait.strategy Wait)
+           (org.testcontainers.utility DockerImageName)))
 
 (set! *warn-on-reflection* true)
 
@@ -29,15 +27,15 @@
                         (Thread. #(PostgreSQLContainer/.close container)))
       container)))
 
-(defn  ^:private get-test-db
+(defn ^:private get-test-db
   []
-  (let [container (@pg-test-container-delay)]
+  (let [container @pg-test-container-delay]
     (jdbc/get-datasource
      {:dbtype "postgresql"
       :jdbcUrl (str "jdbc:postgresql://"
                     (PostgreSQLContainer/.getHost container)
                     ":"
-                    (PostgreSQLContainer/.getMappedPort container)
+                    (PostgreSQLContainer/.getMappedPort container PostgreSQLContainer/POSTGRESQL_PORT)
                     "/"
                     (PostgreSQLContainer/.getDatabaseName container)
                     "?user="
@@ -77,6 +75,7 @@
      [(format "CREATE DATABASE %s TEMPLATE %s;"
               test-database-name
               (PostgreSQLContainer/.getDatabaseName container))])
+
     (try
       (let [db (jdbc/get-datasource
                 {:dbtype "postgresql"
@@ -94,4 +93,4 @@
         (callback db))
       (finally
         (jdbc/execute! db
-                       [(format "DROP DATABASE %s; " test-database-name)])))))
+                       [(format "DROP DATABASE %s;" test-database-name)])))))
